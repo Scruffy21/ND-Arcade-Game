@@ -1,3 +1,49 @@
 body {
     text-align: center;
 }
+
+canvas {
+    border: 1px solid black;
+}
+
+.playerChoice {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(255, 236, 202, 0.6);
+}
+
+.char {
+    display: inline-block;
+    width: 101px;
+    height: 171px;
+    position: relative;
+}
+
+.selector::after {
+    content: "";
+    background: url(../images/selector.png);;
+    width: 101px;
+    height: 171px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.char-boy {
+    background: url(../images/char-boy.png)
+}
+.char-cat-girl {
+    background: url(../images/char-cat-girl.png)
+}
+.char-horn-girl {
+    background: url(../images/char-horn-girl.png)
+}
+.char-pink-girl {
+    background: url(../images/char-pink-girl.png)
+}
+.char-princess-girl {
+    background: url(../images/char-princess-girl.png)
+}
