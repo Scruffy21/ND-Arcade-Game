@@ -1,14 +1,16 @@
 // Enemies our player must avoid
-var Enemy = function(x, y, speed) {
+var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
+    const speedRange = [100, 400];
+    const spawnPositions = [62, 147, 227];
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
+    this.x = - 100;
+    this.y = spawnPositions[Math.floor(Math.random() * spawnPositions.length)];
+    this.speed = Math.floor(Math.random() * (speedRange[1]-speedRange[0]) + speedRange[0]);
 };
 
 // Update the enemy's position, required method for game
@@ -17,7 +19,10 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x += this.speed * dt * 5;
+    this.x += this.speed * dt;
+    if (this.x >= 600) {
+        this.remove();
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -25,43 +30,80 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.remove = function () {
+    allEnemies.splice(allEnemies.indexOf(this), 1);
+}
+
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 
 var Player = function (character) {
     this.sprite = `images/char-${character}.png`;
-    this.speedX = 101;
-    this.speedY = 83;
+    this.speed = 1000;
     this.moveDir = null;
     this.x = 200;
     this.y = 380;
 };
 
 Player.prototype.update = function (dt) {
-    moveDir
+    let tempX = this.x, tempY = this.y;
+    switch (this.moveDir) {
+        case "left":
+            tempX -= this.speed * dt;
+            break;
+        case "up":
+            tempY -= this.speed * dt;
+            break;
+        case "right":
+            tempX += this.speed * dt;
+            break;
+        case "down":
+            tempY += this.speed * dt;
+            break;
+    }
+
+    if (this.checkBounds(tempX, tempY)) {
+        this.x = tempX;
+        this.y = tempY;
+    }
     this.moveDir = null;
 
+    // check if there is a collision with an enemy
+    allEnemies.forEach(function (enemy) {
+        player.checkCollision(enemy);
+    });
+
+    if (Math.random() < 0.03) {
+        allEnemies.push(new Enemy());
+    }
 }
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+Player.prototype.checkBounds = function (tempX, tempY) {
+    return tempX >= -15 && tempX <= 415 && tempY > -10 && tempY < 450;
+}
+
 Player.prototype.handleInput = function (key) {
-    switch (key) {
-        case "left":
-            this.moveDir = key;
-            break;
-        case "up":
-            this.y -= this.speedY;
-            break;
-        case "right":
-            this.x += this.speedX;
-            break;
-        case "down":
-            this.y += this.speedY;
-            break;    
+    if (key === "left" || key === "up" || key === "right" || key === "down") {
+        this.moveDir = key;
+    }
+}
+
+Player.prototype.checkCollision = function (obj) {
+    //check if left border of player is further to the left than right border of enemy
+    //and if top border of player is further up than bottom border of enemy
+    // and the 2 other borders
+    // then check the same for the other borders
+    if ((this.x + 18 <= obj.x + 98 && this.y + 65 <= obj.y + 143) &&
+    (this.x + 84 >= obj.x + 2 && this.y + 138 >= obj.y + 78))    {
+        console.log("collided");
+        console.log("player positions: " + this.x + " " + this.y);
+        console.log("enemy positions: " + obj.x + " " + obj.y);
     }
 }
 
@@ -69,7 +111,8 @@ Player.prototype.handleInput = function (key) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-const allEnemies = [new Enemy(100, 100, 50)];
+const allEnemies = [new Enemy()];
+// const allEnemies = [new Enemy(100, 100, 0)];
 
 const player = new Player("boy");
 
