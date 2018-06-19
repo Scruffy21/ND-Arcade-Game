@@ -71,9 +71,16 @@ Player.prototype.update = function (dt) {
     this.moveDir = null;
 
     // check if there is a collision with an enemy
-    allEnemies.forEach(function (enemy) {
-        player.checkCollision(enemy);
-    });
+    if (allEnemies.some(function (enemy) {
+        return player.checkCollision(enemy);
+    })) {
+        gameOver("lost");
+    }
+
+    //check if reached water
+    if (player.y <= 3) {
+        gameOver("won");
+    }
 
     if (Math.random() < 0.03) {
         allEnemies.push(new Enemy());
@@ -85,7 +92,7 @@ Player.prototype.render = function() {
 }
 
 Player.prototype.checkBounds = function (tempX, tempY) {
-    return tempX >= -15 && tempX <= 415 && tempY > -10 && tempY < 450;
+    return tempX >= -15 && tempX <= 415 && tempY > -20 && tempY < 450;
 }
 
 Player.prototype.handleInput = function (key) {
@@ -99,12 +106,8 @@ Player.prototype.checkCollision = function (obj) {
     //and if top border of player is further up than bottom border of enemy
     // and the 2 other borders
     // then check the same for the other borders
-    if ((this.x + 18 <= obj.x + 98 && this.y + 65 <= obj.y + 143) &&
-    (this.x + 84 >= obj.x + 2 && this.y + 138 >= obj.y + 78))    {
-        console.log("collided");
-        console.log("player positions: " + this.x + " " + this.y);
-        console.log("enemy positions: " + obj.x + " " + obj.y);
-    }
+    return (this.x + 18 <= obj.x + 98 && this.y + 65 <= obj.y + 143) &&
+    (this.x + 84 >= obj.x + 2 && this.y + 138 >= obj.y + 78)
 }
 
 
@@ -129,3 +132,18 @@ document.addEventListener('keydown', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+const msg = document.querySelector(".outcome-message");
+const replay = document.querySelector(".play-again");
+
+
+function gameOver(result) {
+    window.cancelAnimationFrame(window.frameRequestID);
+    if (result === "won") {
+        msg.textContent = "Congratulations, you won.";
+    }
+    else {
+        msg.textContent = "You lost.";
+    }
+    msg.parentElement.parentElement.style.display = "flex";
+}

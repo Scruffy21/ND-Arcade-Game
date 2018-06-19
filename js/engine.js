@@ -23,6 +23,7 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
+        
 
     canvas.width = 505;
     canvas.height = 606;
@@ -55,7 +56,7 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+        window.frameRequestID = win.requestAnimationFrame(main);
     }
 
     /* This function does some initial setup that should only occur once,

@@ -2,11 +2,7 @@ body {
     text-align: center;
 }
 
-canvas {
-    border: 1px solid black;
-}
-
-.playerChoice {
+/* .playerChoice {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -46,4 +42,17 @@ canvas {
 }
 .char-princess-girl {
     background: url(../images/char-princess-girl.png)
+} */
+
+.game-over-modal-cont {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 204, 116);
+    font-size: 2rem;
 }
