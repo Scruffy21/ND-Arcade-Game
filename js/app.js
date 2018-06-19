@@ -134,8 +134,8 @@ document.addEventListener('keydown', function(e) {
 });
 
 const msg = document.querySelector(".outcome-message");
-const replay = document.querySelector(".play-again");
-
+const replaybtn = document.querySelector(".play-again");
+replaybtn.addEventListener("click", replay);
 
 function gameOver(result) {
     window.cancelAnimationFrame(window.frameRequestID);
@@ -146,4 +146,10 @@ function gameOver(result) {
         msg.textContent = "You lost.";
     }
     msg.parentElement.parentElement.style.display = "flex";
+}
+
+function replay() {
+    player.x = 200;
+    player.y = 380;
+    msg.parentElement.parentElement.style.display = "none";
 }
