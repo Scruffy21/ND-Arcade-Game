@@ -115,7 +115,6 @@ Player.prototype.checkCollision = function (obj) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 const allEnemies = [new Enemy()];
-// const allEnemies = [new Enemy(100, 100, 0)];
 
 const player = new Player("boy");
 
